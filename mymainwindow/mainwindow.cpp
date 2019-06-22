@@ -7,6 +7,9 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QFileInfo>
+#include <QLineEdit>
+#include <QLabel>
+#include "mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -19,6 +22,36 @@ MainWindow::MainWindow(QWidget *parent) :
     curFile=codec->toUnicode("未命名.txt");
     //初始化窗口标题为文件名
     setWindowTitle(curFile);
+
+    //查找窗口
+    findDlg=new QDialog(this);
+    findDlg->setWindowTitle(codec->toUnicode("查找"));
+    findLineEdit=new QLineEdit(findDlg);
+    QPushButton *findDlgBtn=new QPushButton(codec->toUnicode("查找下一个"),findDlg);
+    QVBoxLayout *layout=new QVBoxLayout(findDlg);
+    layout->addWidget(findLineEdit);
+    layout->addWidget(findDlgBtn);
+    //自定义按钮的信号槽
+    connect(findDlgBtn,&QPushButton::clicked,this,&MainWindow::showFindEdit);
+
+    //临时状态信息
+    //ui->statusBar->showMessage(codec->toUnicode("欢迎访问GG记事本!"),5000);
+
+    //临时标签状态栏信息
+    statusLabel =new QLabel;
+    statusLabel->setMinimumSize(150,20);
+    statusLabel->setFrameShape(QFrame::WinPanel);
+    statusLabel->setFrameShadow(QFrame::Sunken);
+    ui->statusBar->addWidget(statusLabel);
+    statusLabel->setText(codec->toUnicode("欢迎访问GG记事本"));
+
+    //永久标签状态信息（最右侧）
+    QLabel *permanent=new QLabel;
+    permanent->setFrameStyle(QFrame::Box|QFrame::Sunken);
+    permanent->setTextFormat(Qt::RichText);
+    permanent->setText(tr("<a href=\"http://www.baidu.com\">Baidu.com</a>"));
+    permanent->setOpenExternalLinks(true);
+    ui->statusBar->addPermanentWidget(permanent);
 }
 
 MainWindow::~MainWindow()
@@ -53,9 +86,9 @@ bool MainWindow::maybeSave()
         if(box.clickedButton()==yesBtn){
             return save();
         }
-//        else if(box.clickedButton()==cancleBtn){
-//            return false;
-//        }
+        //        else if(box.clickedButton()==cancleBtn){
+        //            return false;
+        //        }
     }
     //文档未更改
     return true;
@@ -190,4 +223,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }else{
         event->ignore();
     }
+}
+
+void MainWindow::showFindEdit()
+{
+    QString findString=findLineEdit->text();
+    if(!ui->textEdit->find(findString, QTextDocument::FindBackward)){
+        QMessageBox::warning(this,codec->toUnicode("查找"),codec->toUnicode("找不到%1").arg(findString));
+    }
+}
+
+void MainWindow::on_action_Find_triggered()
+{
+    findDlg->show();
 }

@@ -5,6 +5,11 @@
 #include <QTextCodec>
 #include <QCloseEvent>
 
+//前置声明 与头文件声明的位置一致
+class QLineEdit;
+class QDialog;
+class QLabel;
+
 namespace Ui {
 class MainWindow;
 }
@@ -44,6 +49,13 @@ private slots:
     void on_action_Paste_triggered();
 protected:
     void closeEvent(QCloseEvent *Event);
+private:
+    QLineEdit *findLineEdit;
+    QDialog *findDlg;
+    QLabel *statusLabel;
+private slots:
+    void showFindEdit();
+    void on_action_Find_triggered();
 };
 
 #endif // MAINWINDOW_H

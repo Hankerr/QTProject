@@ -86,6 +86,9 @@
    <property name="text">
     <string>新建(N)</string>
    </property>
+   <property name="statusTip">
+    <string>新建文件</string>
+   </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>

@@ -176,6 +176,9 @@ public:
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
         action_New->setText(QApplication::translate("MainWindow", "\346\226\260\345\273\272(N)", nullptr));
+#ifndef QT_NO_STATUSTIP
+        action_New->setStatusTip(QApplication::translate("MainWindow", "\346\226\260\345\273\272\346\226\207\344\273\266", nullptr));
+#endif // QT_NO_STATUSTIP
 #ifndef QT_NO_SHORTCUT
         action_New->setShortcut(QApplication::translate("MainWindow", "Ctrl+N", nullptr));
 #endif // QT_NO_SHORTCUT
