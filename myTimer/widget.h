@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QTimerEvent>
 
 namespace Ui {
 class Widget;
@@ -18,8 +19,11 @@ public:
 private:
     Ui::Widget *ui;
 protected:
-    void mousePressEvent(QMouseEvent *);
-    void keyPressEvent(QKeyEvent *);
+    void timerEvent(QTimerEvent *);
+private:
+    int id1,id2,id3;
+private:
+    void timerUpdate();
 };
 
 #endif // WIDGET_H

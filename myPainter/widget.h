@@ -18,8 +18,7 @@ public:
 private:
     Ui::Widget *ui;
 protected:
-    void mousePressEvent(QMouseEvent *);
-    void keyPressEvent(QKeyEvent *);
+    void paintEvent(QPaintEvent *);
 };
 
 #endif // WIDGET_H
