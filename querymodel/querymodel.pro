@@ -1,16 +1,15 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2019-06-27T01:00:49
+# Project created by QtCreator 2019-06-28T00:10:53
 #
 #-------------------------------------------------
 
-QT       += core gui
-QT       += sql
-LIBS     += "C:/MySql/lib/libmysql.lib"
+QT       += core gui sql
+#LIBS     +=
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = myquery
+TARGET = querymodel
 TEMPLATE = app
 
 # The following define makes your compiler emit warnings if you use
