@@ -13,10 +13,10 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QDateTimeEdit>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 #include <QtWidgets/QWidget>
@@ -27,7 +27,7 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralWidget;
-    QDateTimeEdit *dateTimeEdit;
+    QPushButton *pushButton;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -39,9 +39,9 @@ public:
         MainWindow->resize(400, 300);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        dateTimeEdit = new QDateTimeEdit(centralWidget);
-        dateTimeEdit->setObjectName(QStringLiteral("dateTimeEdit"));
-        dateTimeEdit->setGeometry(QRect(210, 220, 194, 22));
+        pushButton = new QPushButton(centralWidget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setGeometry(QRect(110, 90, 71, 31));
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -62,6 +62,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
+        pushButton->setText(QApplication::translate("MainWindow", "\346\237\245  \350\257\242", nullptr));
     } // retranslateUi
 
 };

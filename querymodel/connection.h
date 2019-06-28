@@ -8,7 +8,8 @@ static bool createConnection()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("database.db");
-    if(!db.open()) return false;
+    if(!db.open())
+        return false;
     QSqlQuery query;
     query.exec("create table student (id int primary key, namevchar)");
     query.exec("insert into student values (0,'yafei0')");

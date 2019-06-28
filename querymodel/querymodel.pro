@@ -5,7 +5,6 @@
 #-------------------------------------------------
 
 QT       += core gui sql
-#LIBS     +=
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,11 +25,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    mysqlquerymodel.cpp
 
 HEADERS += \
         mainwindow.h \
-    connection.h
+    connection.h \
+    mysqlquerymodel.h
 
 FORMS += \
         mainwindow.ui
