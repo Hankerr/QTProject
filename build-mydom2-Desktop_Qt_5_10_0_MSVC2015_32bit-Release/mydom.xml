@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Library>
+    <Book 编号="1">
+        <图书>Qt</图书>
+        <作者>shiming</作者>
+    </Book>
+    <Book 编号="2">
+        <图书>C++</图书>
+        <作者>sam</作者>
+    </Book>
+</Library>

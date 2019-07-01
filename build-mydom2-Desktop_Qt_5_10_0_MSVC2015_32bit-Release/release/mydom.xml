@@ -1,0 +1,11 @@
+<?xml version="1.0"encoding="UTF-8"?>
+<Library>
+    <Book Id="1">
+        <NameOfBook>Qt</NameOfBook>
+        <Author>shiming</Author>
+    </Book>
+    <Book Id="2">
+        <NameOfBook>C++</NameOfBook>
+        <Ahthor>sam</Ahthor>
+    </Book>
+</Library>
