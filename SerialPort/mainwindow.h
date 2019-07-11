@@ -29,9 +29,15 @@ private slots:
     void on_btn_clearRecv_clicked();
 
     void readData();
+public:
+    char ConvertHexChar(char c);
 
+    void setground();
+
+    void QStringtoHex(QByteArray& sendData,QString str);
 private:
     Ui::MainWindow *ui;
     QSerialPort *serial;
+    QPalette palette;
 };
 #endif // MAINWINDOW_H

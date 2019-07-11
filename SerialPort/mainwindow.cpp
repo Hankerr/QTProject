@@ -9,16 +9,20 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
+    //设置背景颜色
+    setground();
 
+    QIcon icon;
+    icon.addFile(tr("res/images/win.ico"));
+    setWindowIcon(icon);
+
+    ui->setupUi(this);
     serial =new QSerialPort;
 
     QString description;
     QString manufacturer;
     QString serialNumber;
-
     QList<QSerialPortInfo> serialPortInfos=QSerialPortInfo::availablePorts();
-    qDebug()<<"Total numbers of ports:"<<serialPortInfos.count()<<endl;
     //将所有可使用的串口添加到ComboBox中
     for(const QSerialPortInfo &serialPortInfo : serialPortInfos){
         description=serialPortInfo.description();
@@ -45,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBox_baudRate->addItem(QStringLiteral("38400"),QSerialPort::Baud38400);
     ui->comboBox_baudRate->addItem(QStringLiteral("57600"),QSerialPort::Baud57600);
     ui->comboBox_baudRate->addItem(QStringLiteral("115200"),QSerialPort::Baud115200);
-    ui->comboBox_baudRate->addItem(tr("Custom"));
+    ui->comboBox_baudRate->addItem(tr("custom"));
     //设置数据位
     ui->comboBox_dataBit->addItem(QStringLiteral("5"), QSerialPort::Data5);
     ui->comboBox_dataBit->addItem(QStringLiteral("6"), QSerialPort::Data6);
@@ -70,6 +74,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //禁用发送按钮
     ui->btn_Send->setEnabled(false);
+
+    //设置发送编码格式
+    ui->radioButton_hex->setChecked(true);
+
 }
 
 MainWindow::~MainWindow()
@@ -127,7 +135,27 @@ void MainWindow::on_btn_openConsole_clicked()
 
 void MainWindow::on_btn_Send_clicked()
 {
-    serial->write(ui->textEdit_send->toPlainText().toLatin1());
+    QString sendData = ui->textEdit_send->toPlainText();
+    qDebug()<<sendData<<endl;
+
+    if(ui->radioButton_ascii->isChecked()){
+        //displaysend(sendData);
+        //Unicode转GBK
+        QTextCodec *codec = QTextCodec::codecForName("GBK"); //建立一个unicode与GBK之间的转换器
+        QByteArray bytesForGBK = codec->fromUnicode(sendData); //unicode转换成gbk
+        //发送数据
+        serial->write(bytesForGBK);
+    } else if(ui->radioButton_hex->isChecked()) {
+        //是否显示发送消息
+        //displaysend(sendData);
+        // HexToString
+        QByteArray sendbuff("");
+        //方法一
+        QStringtoHex(sendbuff,sendData);
+        //方法二
+        //sendbuff = QByteArray::fromHex(sendData.toLatin1().data());
+        serial->write(sendbuff);
+    }
 }
 
 void MainWindow::on_btn_clearSend_clicked()
@@ -142,37 +170,86 @@ void MainWindow::on_btn_clearRecv_clicked()
 
 void MainWindow::readData()
 {
-    QByteArray buf;
-    qDebug() << "readData: " << endl;
+    QByteArray buf;//QByteArray为16进制字符
     buf = serial->readAll();
+    //qDebug() << "readData: " <<buf<< endl;
     if (!buf.isEmpty())
     {
         QString str = ui->textEdit_recv->toPlainText();
-        str +=tr(buf);
-        str +="\r\n";
-        ui->textEdit_recv->clear();
-        ui->textEdit_recv->append(str);
+        if(ui->radioButton_ascii->isChecked()){
+            str +=tr(buf);
+            str +="\r\n";
+            ui->textEdit_recv->clear();
+            ui->textEdit_recv->append(str);
+        }else if(ui->radioButton_hex->isChecked()){
+            str +=QString(buf.toInt());//转化为int
+            str +="\r\n";
+            ui->textEdit_recv->clear();
+            ui->textEdit_recv->append(str);
+        }
     }
 }
 
+char MainWindow::ConvertHexChar(char c)
+{
+    if(c>='a'&&c<='f')
+    {
+        return c-'a'+10;
+    }
+    else if(c>='A'&&c<='F')
+    {
+        return c-'A'+10;
+    }
+    else if(c>='0'&&c<='9')
+    {
+        return c-'0';
+    }
+    else{
+        return -1;
+    }
+}
 
+void MainWindow::setground()
+{
+    palette.setColor(QPalette::Background,QColor(85, 85, 125));
+    this->setPalette(palette);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void MainWindow::QStringtoHex(QByteArray& sendData,QString str)
+{
+    char hstr,lstr,hdata,ldata;
+    int len = str.length();
+    int sendnum = 0;
+    QByteArray temp;
+    temp.resize(len);//设置大小，len/2会大于实际16进制字符
+    //sendData.resize(len/2);
+    for(int i=0;i<len;)
+    {
+        //hstr = str[i].toAscii();
+        hstr = str[i].toLatin1();
+        if(hstr == ' ')
+        {
+            ++i;
+            continue;
+        }
+        ++i;
+        if(i >= len)
+        {
+            break;
+        }
+        lstr = str[i].toLatin1();
+        hdata = ConvertHexChar(hstr);
+        ldata = ConvertHexChar(lstr);
+        if(-1 == hdata || -1 == ldata)
+        {
+            break;
+        }
+        ++i;
+        temp[sendnum] = hdata<<4 | ldata;
+        sendnum++;
+    }
+    sendData.reserve(sendnum);
+    //sendData = temp.left(sendnum);//去掉多余字符
+    qDebug()<<sendData<<endl;
+}
 

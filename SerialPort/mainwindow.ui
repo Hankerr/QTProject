@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>616</width>
-    <height>402</height>
+    <width>600</width>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>串口接收发送工具-fwx545746</string>
+   <string>SerialPort</string>
   </property>
   <property name="layoutDirection">
    <enum>Qt::LeftToRight</enum>
@@ -23,17 +23,17 @@
       <x>10</x>
       <y>10</y>
       <width>171</width>
-      <height>351</height>
+      <height>381</height>
      </rect>
     </property>
     <property name="title">
-     <string>串口参数配置</string>
+     <string>参数配置</string>
     </property>
     <widget class="QPushButton" name="btn_openConsole">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>320</y>
+       <y>350</y>
        <width>75</width>
        <height>23</height>
       </rect>
@@ -42,100 +42,122 @@
       <string>打开串口</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>23</x>
+       <x>20</x>
        <y>30</y>
-       <width>130</width>
-       <height>271</height>
+       <width>132</width>
+       <height>311</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="spacing">
-       <number>25</number>
-      </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>25</number>
+        </property>
         <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>端口号：</string>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>端口号：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_serialPort"/>
+          </item>
+         </layout>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_serialPort"/>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>波特率：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_baudRate"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>数据位：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_dataBit"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>校验位：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_parity"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>停止位：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_stopBit"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>流控位：</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_flowBit"/>
+          </item>
+         </layout>
         </item>
        </layout>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout_8">
         <item>
-         <widget class="QLabel" name="label_2">
+         <widget class="QRadioButton" name="radioButton_ascii">
           <property name="text">
-           <string>波特率：</string>
+           <string>ASCII</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="comboBox_baudRate"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_3">
-        <item>
-         <widget class="QLabel" name="label_3">
+         <widget class="QRadioButton" name="radioButton_hex">
           <property name="text">
-           <string>数据位：</string>
+           <string>HEX</string>
           </property>
          </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox_dataBit"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-        <item>
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>校验位：</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox_parity"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_5">
-        <item>
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>停止位：</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox_stopBit"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>流控位：</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QComboBox" name="comboBox_flowBit"/>
         </item>
        </layout>
       </item>
@@ -148,7 +170,7 @@
       <x>190</x>
       <y>10</y>
       <width>401</width>
-      <height>351</height>
+      <height>381</height>
      </rect>
     </property>
     <property name="title">
@@ -171,7 +193,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>170</y>
+       <y>180</y>
        <width>54</width>
        <height>12</height>
       </rect>
@@ -186,7 +208,7 @@
        <x>20</x>
        <y>40</y>
        <width>361</width>
-       <height>111</height>
+       <height>131</height>
       </rect>
      </property>
     </widget>
@@ -194,9 +216,9 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>190</y>
+       <y>200</y>
        <width>361</width>
-       <height>111</height>
+       <height>121</height>
       </rect>
      </property>
     </widget>
@@ -204,8 +226,8 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>320</y>
-       <width>372</width>
+       <y>340</y>
+       <width>361</width>
        <height>25</height>
       </rect>
      </property>
@@ -243,7 +265,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>616</width>
+     <width>600</width>
      <height>22</height>
     </rect>
    </property>

@@ -35,3 +35,7 @@ FORMS += \
         mainwindow.ui
 
 DISTFILES +=
+
+RESOURCES += \
+    res.qrc
+RC_ICONS = win.ico
