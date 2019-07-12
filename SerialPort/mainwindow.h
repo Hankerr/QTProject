@@ -30,11 +30,10 @@ private slots:
 
     void readData();
 public:
-    char ConvertHexChar(char c);
-
+    char convertCharToHex(char ch);
     void setground();
-
-    void QStringtoHex(QByteArray& sendData,QString str);
+    void QStringtoHex(const QString &str, QByteArray &byteData);
+    QString ByteArrayToHexString(QByteArray data);
 private:
     Ui::MainWindow *ui;
     QSerialPort *serial;

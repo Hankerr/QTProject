@@ -1,6 +1,5 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
 #include <QList>
 
 static const char blankString[] = QT_TRANSLATE_NOOP("SettingsDialog", "N/A");
@@ -88,7 +87,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_btn_openConsole_clicked()
 {
-    qDebug()<<ui->btn_openConsole->text()<<endl;
     if(ui->btn_openConsole->text()==tr("打开串口")){
         //设置串口名称
         serial->setPortName(ui->comboBox_serialPort->currentText());
@@ -111,9 +109,7 @@ void MainWindow::on_btn_openConsole_clicked()
             ui->comboBox_parity->setEnabled(false);
             ui->comboBox_serialPort->setEnabled(false);
             ui->comboBox_stopBit->setEnabled(false);
-
             ui->btn_Send->setEnabled(true);
-
             ui->btn_openConsole->setText(tr("关闭串口"));
 
             //连接到槽
@@ -127,7 +123,6 @@ void MainWindow::on_btn_openConsole_clicked()
         ui->comboBox_parity->setEnabled(true);
         ui->comboBox_serialPort->setEnabled(true);
         ui->comboBox_stopBit->setEnabled(true);
-
         ui->btn_openConsole->setText(tr("打开串口"));
         ui->btn_Send->setEnabled(false);
     }
@@ -136,8 +131,6 @@ void MainWindow::on_btn_openConsole_clicked()
 void MainWindow::on_btn_Send_clicked()
 {
     QString sendData = ui->textEdit_send->toPlainText();
-    qDebug()<<sendData<<endl;
-
     if(ui->radioButton_ascii->isChecked()){
         //displaysend(sendData);
         //Unicode转GBK
@@ -151,9 +144,9 @@ void MainWindow::on_btn_Send_clicked()
         // HexToString
         QByteArray sendbuff("");
         //方法一
-        QStringtoHex(sendbuff,sendData);
+        //QStringtoHex(sendData,sendbuff);
         //方法二
-        //sendbuff = QByteArray::fromHex(sendData.toLatin1().data());
+        sendbuff = QByteArray::fromHex(sendData.toLatin1().data());
         serial->write(sendbuff);
     }
 }
@@ -172,41 +165,30 @@ void MainWindow::readData()
 {
     QByteArray buf;//QByteArray为16进制字符
     buf = serial->readAll();
-    //qDebug() << "readData: " <<buf<< endl;
     if (!buf.isEmpty())
     {
-        QString str = ui->textEdit_recv->toPlainText();
+        QString str;
+        //ASCII进制读取
         if(ui->radioButton_ascii->isChecked()){
             str +=tr(buf);
-            str +="\r\n";
-            ui->textEdit_recv->clear();
             ui->textEdit_recv->append(str);
+            //16进制读取
         }else if(ui->radioButton_hex->isChecked()){
-            str +=QString(buf.toInt());//转化为int
-            str +="\r\n";
-            ui->textEdit_recv->clear();
+            str =ByteArrayToHexString(buf);
             ui->textEdit_recv->append(str);
         }
     }
 }
 
-char MainWindow::ConvertHexChar(char c)
+char MainWindow::convertCharToHex(char ch)
 {
-    if(c>='a'&&c<='f')
-    {
-        return c-'a'+10;
-    }
-    else if(c>='A'&&c<='F')
-    {
-        return c-'A'+10;
-    }
-    else if(c>='0'&&c<='9')
-    {
-        return c-'0';
-    }
-    else{
-        return -1;
-    }
+    if((ch >= '0') && (ch <= '9'))
+         return ch-0x30;
+     else if((ch >= 'A') && (ch <= 'F'))
+         return ch-'A'+10;
+     else if((ch >= 'a') && (ch <= 'f'))
+         return ch-'a'+10;
+    else return (-1);
 }
 
 void MainWindow::setground()
@@ -215,41 +197,46 @@ void MainWindow::setground()
     this->setPalette(palette);
 }
 
-void MainWindow::QStringtoHex(QByteArray& sendData,QString str)
+void MainWindow::QStringtoHex(const QString &str, QByteArray &byteData)
 {
-    char hstr,lstr,hdata,ldata;
+    int hexdata,lowhexdata;
+    int hexdatalen = 0;
     int len = str.length();
-    int sendnum = 0;
-    QByteArray temp;
-    temp.resize(len);//设置大小，len/2会大于实际16进制字符
-    //sendData.resize(len/2);
-    for(int i=0;i<len;)
+    byteData.resize(len/2);
+    char lstr,hstr;
+    for(int i=0; i<len; )
     {
-        //hstr = str[i].toAscii();
-        hstr = str[i].toLatin1();
+        //char lstr,
+        hstr=str[i].toLatin1();
         if(hstr == ' ')
         {
-            ++i;
+            i++;
             continue;
         }
-        ++i;
+        i++;
         if(i >= len)
-        {
             break;
-        }
         lstr = str[i].toLatin1();
-        hdata = ConvertHexChar(hstr);
-        ldata = ConvertHexChar(lstr);
-        if(-1 == hdata || -1 == ldata)
-        {
+        hexdata = convertCharToHex(hstr);
+        lowhexdata = convertCharToHex(lstr);
+        if((hexdata == 16) || (lowhexdata == 16))
             break;
-        }
-        ++i;
-        temp[sendnum] = hdata<<4 | ldata;
-        sendnum++;
+        else
+            hexdata = hexdata*16+lowhexdata;
+        i++;
+        byteData[hexdatalen] = (char)hexdata;
+        hexdatalen++;
     }
-    sendData.reserve(sendnum);
-    //sendData = temp.left(sendnum);//去掉多余字符
-    qDebug()<<sendData<<endl;
+    byteData.resize(hexdatalen);
+}
+
+QString MainWindow::ByteArrayToHexString(QByteArray data){
+    QString ret(data.toHex().toUpper());
+    int len = ret.length()/2;
+    for(int i=1;i<len;i++)
+    {
+        ret.insert(2*i+i-1," ");
+    }
+    return ret;
 }
 
